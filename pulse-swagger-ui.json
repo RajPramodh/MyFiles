@@ -1,8 +1,12 @@
 openapi: 3.0.1
 info:
   title: Pulse Application API
-  description: This is a Spring Boot RESTful service using springdoc-openapi and OpenAPI
-    3 for Pulse application
+  description: "PULSE Health Dashboard is a near real time dashboard showing the status\
+    \ of all the platforms and its application status along with RED metrics and USE\
+    \ metrics with history\r\nPULSE Dashboard also provides ongoing issues along with\
+    \ the incidents and its communications in Email\\SMS\r\nDashboard will be sitting\
+    \ behind MCC on PCF which will help customers check their application status \r\
+    \n"
   contact:
     name: Pulse Dashboard API
     email: pulse_admin@mastercard.com
@@ -343,6 +347,21 @@ paths:
                 $ref: '#/components/schemas/PulseResponse'
 components:
   schemas:
+    PulseResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorDescription:
+          type: string
+        callReferenceNumber:
+          type: string
+        responseMessage:
+          type: string
+        responseData:
+          type: object
+        success:
+          type: boolean
     StatusRequest:
       type: object
       properties:
@@ -362,48 +381,6 @@ components:
           type: boolean
         subscribed:
           type: boolean
-    PulseResponse:
-      type: object
-      properties:
-        errorCode:
-          type: string
-        errorDescription:
-          type: string
-        callReferenceNumber:
-          type: string
-        responseMessage:
-          type: string
-        responseData:
-          type: object
-        success:
-          type: boolean
-    ApplicationRequest:
-      type: object
-      properties:
-        applicationId:
-          type: string
-        description:
-          type: string
-        applicationType:
-          type: string
-        dynatraceId:
-          type: string
-        dynatraceHost:
-          type: string
-        status:
-          type: string
-        statusType:
-          type: string
-        platformId:
-          type: string
-        empId:
-          type: string
-        displayName:
-          type: string
-        healthCheckApi:
-          type: string
-        apiCertificate:
-          type: string
     ApplicationModel:
       type: object
       properties:
@@ -438,6 +415,33 @@ components:
         subscribed:
           type: integer
           format: int32
+    ApplicationRequest:
+      type: object
+      properties:
+        applicationId:
+          type: string
+        description:
+          type: string
+        applicationType:
+          type: string
+        dynatraceId:
+          type: string
+        dynatraceHost:
+          type: string
+        status:
+          type: string
+        statusType:
+          type: string
+        platformId:
+          type: string
+        empId:
+          type: string
+        displayName:
+          type: string
+        healthCheckApi:
+          type: string
+        apiCertificate:
+          type: string
     AuthRoleResponse:
       type: object
       properties:
@@ -455,44 +459,6 @@ components:
         id:
           type: string
         value:
-          type: string
-    PlatformModel:
-      type: object
-      properties:
-        platformId:
-          type: string
-        description:
-          type: string
-        programOwner:
-          type: string
-        technicalOwner:
-          type: string
-        userAdGroup:
-          type: string
-        adminAdGroup:
-          type: string
-        programId:
-          type: string
-        enterpriseId:
-          type: string
-        empId:
-          type: string
-        displayName:
-          type: string
-        onboardRequest:
-          type: boolean
-    PlatformApproveRequest:
-      type: object
-      properties:
-        platformId:
-          type: string
-        empId:
-          type: string
-        requestedBy:
-          type: string
-        requestStatus:
-          type: string
-        rejectReason:
           type: string
     PlatformDetails:
       type: object
@@ -556,6 +522,44 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PlatformDetails'
+    PlatformModel:
+      type: object
+      properties:
+        platformId:
+          type: string
+        description:
+          type: string
+        programOwner:
+          type: string
+        technicalOwner:
+          type: string
+        userAdGroup:
+          type: string
+        adminAdGroup:
+          type: string
+        programId:
+          type: string
+        enterpriseId:
+          type: string
+        empId:
+          type: string
+        displayName:
+          type: string
+        onboardRequest:
+          type: boolean
+    PlatformApproveRequest:
+      type: object
+      properties:
+        platformId:
+          type: string
+        empId:
+          type: string
+        requestedBy:
+          type: string
+        requestStatus:
+          type: string
+        rejectReason:
+          type: string
     ProfileRequest:
       required:
       - empId
