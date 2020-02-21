@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Pulse Application API
-  description: "PULSE Health Dashboard is a near real time dashboard showing the status\n
+  description: "PULSE Health Dashboard is a near real time dashboard showing the status
     \n of all the platforms and its application status along with RED metrics and USE\
     \n metrics with history\r\nPULSE Dashboard also provides ongoing issues along with\
     \n the incidents and its communications in Email\\SMS\r\nDashboard will be sitting\
