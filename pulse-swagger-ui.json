@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Pulse Application API
-  description: "PULSE Health Dashboard is a near real time dashboard showing the status of all the platforms and its application status along with RED metrics and USE metrics with history. PULSE Dashboard also provides ongoing issues along with the incidents and its communications in Email and SMS. Dashboard will be sitting behind MCC on PCF which will help customers check their application status "
+  description: "PULSE Health Dashboard is a near real time dashboard showing the status of all the platforms and its application status along with RED metrics and USE metrics with history.\n PULSE Dashboard also provides ongoing issues along with the incidents and its communications in Email and SMS.\n Dashboard will be sitting behind MCC on PCF which will help customers check their application status "
   contact:
     name: Pulse Dashboard API
     email: pulse_admin@mastercard.com
