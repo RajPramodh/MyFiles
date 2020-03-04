@@ -25,7 +25,7 @@ tags:
 - name: application
   description: APPLICATION API
 paths:
-  /pulses/applications:
+  /applications:
     get:
       tags:
       - application
@@ -38,19 +38,7 @@ paths:
         required: false
         schema:
           type: string
-      - name: Application-Id
-        in: header
-        required: false
-        schema:
-          type: string
       - name: Admin-Roles
-        in: header
-        required: true
-        schema:
-          type: array
-          items:
-            type: string
-      - name: User-Roles
         in: header
         required: true
         schema:
@@ -62,18 +50,13 @@ paths:
         required: true
         schema:
           type: string
-      - name: Is-Pulse-Admin
-        in: header
-        required: true
-        schema:
-          type: boolean
       responses:
         200:
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplicationModel'
+                $ref: '#/components/schemas/Application Model'
     put:
       tags:
       - application
@@ -107,7 +90,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ApplicationRequest'
+              $ref: '#/components/schemas/Application Request'
         required: true
       responses:
         200:
@@ -142,7 +125,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PulseResponse'
-  /pulses/auths:
+  /auths:
     get:
       tags:
       - authentication
@@ -164,7 +147,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthRoleResponse'
-  /pulses/dropdowns:
+  /dropdowns:
     get:
       tags:
       - dropdown
@@ -203,7 +186,31 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/DropdownResponse'
-  /pulses/platforms:
+  /hello:
+    get:
+      tags:
+      - health-controller
+      operationId: sayHello
+      responses:
+        200:
+          description: default response
+          content:
+            text/plain:
+              schema:
+                type: string
+  /health:
+    get:
+      tags:
+      - health-controller
+      operationId: healthCheck
+      responses:
+        200:
+          description: default response
+          content:
+            text/plain:
+              schema:
+                type: string
+  /platforms:
     get:
       tags:
       - platform
@@ -304,7 +311,61 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PulseResponse'
-  /pulses/profiles:
+  /favorites:
+    post:
+      tags:
+      - platform
+      summary: Add favorite information
+      description: Returns success or failure information
+      operationId: mergeFavorite
+      requestBody:
+        description: favorite information that need to be added or updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavoriteModel'
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PulseResponse'
+    delete:
+      tags:
+      - platform
+      summary: Delete favorite platform/application based on platform Id/application
+        Id and employee id
+      description: Returns success or failure
+      operationId: deleteFavorite
+      parameters:
+      - name: Emp-Id
+        in: header
+        description: Employee Id
+        required: true
+        schema:
+          type: string
+      - name: Favorite-Id
+        in: header
+        description: Favorite Id
+        required: true
+        schema:
+          type: string
+      - name: Favorite-Type
+        in: header
+        description: Favorite Type
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PulseResponse'
+  /profiles:
     get:
       tags:
       - profile
@@ -346,41 +407,7 @@ paths:
                 $ref: '#/components/schemas/PulseResponse'
 components:
   schemas:
-    PulseResponse:
-      type: object
-      properties:
-        errorCode:
-          type: string
-        errorDescription:
-          type: string
-        callReferenceNumber:
-          type: string
-        responseMessage:
-          type: string
-        responseData:
-          type: object
-        success:
-          type: boolean
-    StatusRequest:
-      type: object
-      properties:
-        status:
-          type: string
-        statusName:
-          type: string
-        statusType:
-          type: string
-        applicationId:
-          type: string
-        empId:
-          type: string
-        statusChange:
-          type: boolean
-        onlyStatusType:
-          type: boolean
-        subscribed:
-          type: boolean
-    ApplicationRequest:
+    Application Request:
       type: object
       properties:
         applicationId:
@@ -407,7 +434,23 @@ components:
           type: string
         apiCertificate:
           type: string
-    ApplicationModel:
+      description: It is used to request the information of Applications
+    PulseResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorDescription:
+          type: string
+        callReferenceNumber:
+          type: string
+        responseMessage:
+          type: string
+        responseData:
+          type: object
+        success:
+          type: boolean
+    Application Model:
       type: object
       properties:
         platformId:
@@ -438,9 +481,35 @@ components:
           type: string
         apiCertificate:
           type: string
+        admin:
+          type: integer
+          format: int32
         subscribed:
           type: integer
           format: int32
+        favorite:
+          type: integer
+          format: int32
+      description: This will be the response;  information of Applications
+    StatusRequest:
+      type: object
+      properties:
+        status:
+          type: string
+        statusName:
+          type: string
+        statusType:
+          type: string
+        applicationId:
+          type: string
+        empId:
+          type: string
+        statusChange:
+          type: boolean
+        onlyStatusType:
+          type: boolean
+        subscribed:
+          type: boolean
     AuthRoleResponse:
       type: object
       properties:
@@ -459,6 +528,36 @@ components:
           type: string
         value:
           type: string
+    PlatformApproveRequest:
+      type: object
+      properties:
+        platformId:
+          type: string
+        empId:
+          type: string
+        requestedBy:
+          type: string
+        requestStatus:
+          type: string
+        rejectReason:
+          type: string
+    FavoriteModel:
+      required:
+      - empId
+      - favoriteId
+      - favoriteType
+      type: object
+      properties:
+        empId:
+          pattern: (e)[0-9]{6}
+          type: string
+        favoriteId:
+          pattern: '[0-9]{1,5}'
+          type: string
+        favoriteType:
+          pattern: '[1-2]{1}'
+          type: string
+      description: model to make application and platform as favorite
     PlatformModel:
       type: object
       properties:
@@ -484,19 +583,6 @@ components:
           type: string
         onboardRequest:
           type: boolean
-    PlatformApproveRequest:
-      type: object
-      properties:
-        platformId:
-          type: string
-        empId:
-          type: string
-        requestedBy:
-          type: string
-        requestStatus:
-          type: string
-        rejectReason:
-          type: string
     PlatformDetails:
       type: object
       properties:
@@ -540,17 +626,15 @@ components:
           type: string
         requestedBy:
           type: string
+        favorite:
+          type: integer
+          format: int32
+        admin:
+          type: integer
+          format: int32
     PlatformDetailsJson:
       type: object
       properties:
-        adminPlatforms:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlatformDetails'
-        userPlatforms:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlatformDetails'
         pulseAdminPlatforms:
           type: array
           items:
@@ -566,7 +650,7 @@ components:
       type: object
       properties:
         empId:
-          pattern: (E|e)[0-9]{6}
+          pattern: (e)[0-9]{6}
           type: string
         name:
           type: string
@@ -578,3 +662,4 @@ components:
           type: string
         loginRequest:
           type: boolean
+      description: User profile information
