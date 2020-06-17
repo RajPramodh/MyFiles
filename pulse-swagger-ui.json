@@ -33,19 +33,19 @@ paths:
       description: Returns all the applications infomation for the provided platform
       operationId: fetchApplication
       parameters:
-      - name: Platform-Id
+      - name: x-platform-id
         in: header
         required: false
         schema:
           type: string
-      - name: Admin-Roles
+      - name: x-admin-roles
         in: header
         required: true
         schema:
           type: array
           items:
             type: string
-      - name: Emp-Id
+      - name: x-emp-id
         in: header
         required: true
         schema:
@@ -106,13 +106,13 @@ paths:
       description: Returns success or failure
       operationId: deleteApplication
       parameters:
-      - name: Emp-Id
+      - name: x-emp-id
         in: header
         description: Employee Id
         required: true
         schema:
           type: string
-      - name: Application-Id
+      - name: x-application-id
         in: header
         description: Application Id
         required: true
@@ -133,7 +133,7 @@ paths:
       description: Returns list of pulse roles
       operationId: createParticipant
       parameters:
-      - name: User-Roles
+      - name: x-user-roles
         in: header
         required: true
         schema:
@@ -155,24 +155,24 @@ paths:
       description: Returns dropdown list with id and value
       operationId: createParticipant_1
       parameters:
-      - name: Key
+      - name: x-key
         in: header
         required: true
         schema:
           type: string
-      - name: Dependent-Key
+      - name: x-dependent-key
         in: header
         required: false
         schema:
           type: string
-      - name: Admin-Roles
+      - name: x-admin-roles
         in: header
         required: false
         schema:
           type: array
           items:
             type: string
-      - name: Is-Pulse-Admin
+      - name: x-is-pulse-admin
         in: header
         required: false
         schema:
@@ -186,23 +186,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/DropdownResponse'
-  /hello:
-    get:
-      tags:
-      - health-controller
-      operationId: sayHello
-      responses:
-        200:
-          description: default response
-          content:
-            text/plain:
-              schema:
-                type: string
   /health:
     get:
       tags:
       - health-controller
-      operationId: healthCheck
+      operationId: health
       responses:
         200:
           description: default response
@@ -219,21 +207,19 @@ paths:
         to
       operationId: fetchPlatform
       parameters:
-      - name: Admin-Roles
+      - name: x-emp-id
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-admin-roles
         in: header
         required: true
         schema:
           type: array
           items:
             type: string
-      - name: User-Roles
-        in: header
-        required: true
-        schema:
-          type: array
-          items:
-            type: string
-      - name: Is-Pulse-Admin
+      - name: x-is-pulse-admin
         in: header
         required: true
         schema:
@@ -292,13 +278,13 @@ paths:
       description: Returns success or failure
       operationId: deletePlatform
       parameters:
-      - name: Emp-Id
+      - name: x-emp-id
         in: header
         description: Employee Id
         required: true
         schema:
           type: string
-      - name: Platform-Id
+      - name: x-platform-id
         in: header
         description: Platform Id
         required: true
@@ -340,19 +326,19 @@ paths:
       description: Returns success or failure
       operationId: deleteFavorite
       parameters:
-      - name: Emp-Id
+      - name: x-emp-Id
         in: header
         description: Employee Id
         required: true
         schema:
           type: string
-      - name: Favorite-Id
+      - name: x-favorite-id
         in: header
         description: Favorite Id
         required: true
         schema:
           type: string
-      - name: Favorite-Type
+      - name: x-favorite-type
         in: header
         description: Favorite Type
         required: true
@@ -373,7 +359,7 @@ paths:
       description: Returns single profile information
       operationId: fetchUser
       parameters:
-      - name: Emp-Id
+      - name: x-Emp-Id
         in: header
         required: true
         schema:
@@ -434,6 +420,20 @@ components:
           type: string
         apiCertificate:
           type: string
+        healthCheckSource:
+          type: string
+        runscopeId:
+          type: string
+        runscopeName:
+          type: string
+        splunkSearch1:
+          type: string
+        splunkSearch2:
+          type: string
+        splunkSearch3:
+          type: string
+        splunkSearch4:
+          type: string
       description: It is used to request the information of Applications
     PulseResponse:
       type: object
@@ -481,6 +481,20 @@ components:
           type: string
         apiCertificate:
           type: string
+        healthCheckSource:
+          type: string
+        runscopeId:
+          type: string
+        runscopeName:
+          type: string
+        splunkSearch1:
+          type: string
+        splunkSearch2:
+          type: string
+        splunkSearch3:
+          type: string
+        splunkSearch4:
+          type: string
         admin:
           type: integer
           format: int32
@@ -517,16 +531,41 @@ components:
           type: array
           items:
             type: string
-        userRoles:
-          type: array
-          items:
-            type: string
     DropdownResponse:
       type: object
       properties:
         id:
           type: string
         value:
+          type: string
+    PlatformModel:
+      type: object
+      properties:
+        platformId:
+          type: string
+        description:
+          type: string
+        programOwner:
+          type: string
+        technicalOwner:
+          type: string
+        adminAdGroup:
+          type: string
+        programId:
+          type: string
+        enterpriseId:
+          type: string
+        empId:
+          type: string
+        displayName:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        onboardRequest:
+          type: boolean
+        workOrderNumber:
           type: string
     PlatformApproveRequest:
       type: object
@@ -541,48 +580,8 @@ components:
           type: string
         rejectReason:
           type: string
-    FavoriteModel:
-      required:
-      - empId
-      - favoriteId
-      - favoriteType
-      type: object
-      properties:
-        empId:
-          pattern: (e)[0-9]{6}
+        workOrderNumber:
           type: string
-        favoriteId:
-          pattern: '[0-9]{1,5}'
-          type: string
-        favoriteType:
-          pattern: '[1-2]{1}'
-          type: string
-      description: model to make application and platform as favorite
-    PlatformModel:
-      type: object
-      properties:
-        platformId:
-          type: string
-        description:
-          type: string
-        programOwner:
-          type: string
-        technicalOwner:
-          type: string
-        userAdGroup:
-          type: string
-        adminAdGroup:
-          type: string
-        programId:
-          type: string
-        enterpriseId:
-          type: string
-        empId:
-          type: string
-        displayName:
-          type: string
-        onboardRequest:
-          type: boolean
     PlatformDetails:
       type: object
       properties:
@@ -604,6 +603,8 @@ components:
         outage:
           type: integer
           format: int32
+        workOrderNumber:
+          type: string
         displayName:
           type: string
         description:
@@ -611,8 +612,6 @@ components:
         programOwner:
           type: string
         technicalOwner:
-          type: string
-        userAdGroup:
           type: string
         adminAdGroup:
           type: string
@@ -643,6 +642,23 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PlatformDetails'
+    FavoriteModel:
+      required:
+      - empId
+      - favoriteId
+      - favoriteType
+      type: object
+      properties:
+        empId:
+          pattern: (e)[0-9]{6}
+          type: string
+        favoriteId:
+          pattern: '[0-9]{1,5}'
+          type: string
+        favoriteType:
+          pattern: '[1-2]{1}'
+          type: string
+      description: model to make application and platform as favorite
     ProfileRequest:
       required:
       - empId
@@ -650,7 +666,6 @@ components:
       type: object
       properties:
         empId:
-          pattern: (e)[0-9]{6}
           type: string
         name:
           type: string
