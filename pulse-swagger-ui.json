@@ -7,53 +7,52 @@ info:
     \ the incidents and its communications in Email\\SMS\r\nDashboard will be sitting\
     \ behind MCC on PCF which will help customers check their application status"
   contact:
-    name: Pulse Dashboard API
+    name: Pulse Inbound API Dashboard
     email: pulse_admin@mastercard.com
   version: 1.0.0
-servers:
-- url: http://localhost:8080
-  description: Generated server url
 tags:
-- name: profile
+- name: PROFILE
   description: PROFILE API
-- name: platform
+- name: PLATFORM
   description: PLATFORM API
-- name: dropdown
+- name: HEALTH
+  description: HEALTH API
+- name: DROPDOWN
   description: DROPDOWN API
-- name: contact
+- name: CONTACT
   description: CONTACT API
-- name: authentication
+- name: AUTHENTICATION
   description: AUTHENTICATION API
-- name: application
+- name: APPLICATION
   description: APPLICATION API
 paths:
   /applications:
     get:
       tags:
-      - application
+      - APPLICATION
       summary: Fetch applications information based on platform id
       description: Returns all the applications infomation for the provided platform
       operationId: fetchApplication
       parameters:
-      - name: x-platform-id
+      - name: X-Platform-Id
         in: header
         required: false
         schema:
           type: string
-      - name: x-admin-roles
+      - name: X-Admin-Roles
         in: header
         required: true
         schema:
           type: array
           items:
             type: string
-      - name: x-emp-id
+      - name: X-Emp-Id
         in: header
         required: true
         schema:
           type: string
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -61,7 +60,7 @@ paths:
                 $ref: '#/components/schemas/Application Model'
     put:
       tags:
-      - application
+      - APPLICATION
       summary: Subscribe/ Notify for status change for application
       description: Returns success or failure information
       operationId: subscribeApplication
@@ -75,7 +74,7 @@ paths:
                 $ref: '#/components/schemas/StatusRequest'
         required: true
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -83,7 +82,7 @@ paths:
                 $ref: '#/components/schemas/PulseResponse'
     post:
       tags:
-      - application
+      - APPLICATION
       summary: Add/Update application information
       description: Returns success or failure information
       operationId: mergeApplication
@@ -95,7 +94,7 @@ paths:
               $ref: '#/components/schemas/Application Request'
         required: true
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -103,25 +102,25 @@ paths:
                 $ref: '#/components/schemas/PulseResponse'
     delete:
       tags:
-      - application
+      - APPLICATION
       summary: Delete application based on application Id
       description: Returns success or failure
       operationId: deleteApplication
       parameters:
-      - name: x-emp-id
+      - name: X-Emp-Id
         in: header
         description: Employee Id
         required: true
         schema:
           type: string
-      - name: x-application-id
+      - name: X-Application-Id
         in: header
         description: Application Id
         required: true
         schema:
           type: string
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -130,12 +129,12 @@ paths:
   /auths:
     get:
       tags:
-      - authentication
+      - AUTHENTICATION
       summary: Get all the pulse roles associated with user
       description: Returns list of pulse roles
       operationId: createParticipant
       parameters:
-      - name: x-user-roles
+      - name: X-User-Roles
         in: header
         required: true
         schema:
@@ -143,27 +142,59 @@ paths:
           items:
             type: string
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthRoleResponse'
-  /contact:
+  /contacts:
     get:
       tags:
-      - contact
+      - CONTACT
       summary: Fetch contact details of applications
       description: Return contact details of applications
       operationId: fetchContact
       parameters:
-      - name: x-app-id
+      - name: X-App-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-App-Uuid
         in: header
         required: false
         schema:
           type: string
+      - name: X-Service-Uuid
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: X-Pgm-Uuid
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: X-Lstupdt-Days
+        in: header
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-Table-Contact
+        in: header
+        required: false
+        schema:
+          type: boolean
+      - name: X-Data
+        in: header
+        required: false
+        schema:
+          type: boolean
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -171,7 +202,7 @@ paths:
                 $ref: '#/components/schemas/Contact'
     put:
       tags:
-      - contact
+      - CONTACT
       summary: Update contact details of applications
       description: Returns success or failure information
       operationId: updateContact
@@ -185,7 +216,7 @@ paths:
                 $ref: '#/components/schemas/Contact'
         required: true
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -193,7 +224,7 @@ paths:
                 $ref: '#/components/schemas/Contact'
     post:
       tags:
-      - contact
+      - CONTACT
       summary: Add contact details of applications
       description: Returns success or failure information
       operationId: saveContact
@@ -205,7 +236,7 @@ paths:
               $ref: '#/components/schemas/Contact'
         required: true
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -213,24 +244,23 @@ paths:
                 $ref: '#/components/schemas/Contact'
     delete:
       tags:
-      - contact
+      - CONTACT
       summary: Delete contact details of applications
       description: Returns success or failure information
-      operationId: fetchApplication_1
+      operationId: deleteApplicationContact
       parameters:
-      - name: x-app-id
+      - name: X-App-List
         in: header
         required: true
         schema:
-          type: integer
-          format: int32
-      - name: x-emp-id
+          type: string
+      - name: X-Emp-Id
         in: header
         required: true
         schema:
           type: string
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -239,35 +269,35 @@ paths:
   /dropdowns:
     get:
       tags:
-      - dropdown
+      - DROPDOWN
       summary: Fetch dropdown data based on dependents
       description: Returns dropdown list with id and value
       operationId: createParticipant_1
       parameters:
-      - name: x-key
+      - name: X-Key
         in: header
         required: true
         schema:
           type: string
-      - name: x-dependent-key
+      - name: X-Dependent-Key
         in: header
         required: false
         schema:
           type: string
-      - name: x-admin-roles
+      - name: X-Admin-Roles
         in: header
         required: false
         schema:
           type: array
           items:
             type: string
-      - name: x-is-pulse-admin
+      - name: X-Is-Pulse-Admin
         in: header
         required: false
         schema:
           type: boolean
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -278,64 +308,10 @@ paths:
   /health:
     get:
       tags:
-      - health-controller
+      - HEALTH
       operationId: health
       responses:
-        200:
-          description: default response
-          content:
-            text/plain:
-              schema:
-                type: string
-  /favorites:
-    post:
-      tags:
-      - platform
-      summary: Add favorite information
-      description: Returns success or failure information
-      operationId: mergeFavorite
-      requestBody:
-        description: favorite information that need to be added or updated
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FavoriteModel'
-        required: true
-      responses:
-        200:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PulseResponse'
-    delete:
-      tags:
-      - platform
-      summary: Delete favorite platform/application based on platform Id/application
-        Id and employee id
-      description: Returns success or failure
-      operationId: deleteFavorite
-      parameters:
-      - name: x-emp-Id
-        in: header
-        description: Employee Id
-        required: true
-        schema:
-          type: string
-      - name: x-favorite-id
-        in: header
-        description: Favorite Id
-        required: true
-        schema:
-          type: string
-      - name: x-favorite-type
-        in: header
-        description: Favorite Type
-        required: true
-        schema:
-          type: string
-      responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -344,31 +320,31 @@ paths:
   /platforms:
     get:
       tags:
-      - platform
+      - PLATFORM
       summary: Fetch platform information based on user role
       description: Returns all the platform infomation for which employee has access
         to
       operationId: fetchPlatform
       parameters:
-      - name: x-emp-id
+      - name: X-Emp-Id
         in: header
         required: true
         schema:
           type: string
-      - name: x-admin-roles
+      - name: X-Admin-Roles
         in: header
         required: true
         schema:
           type: array
           items:
             type: string
-      - name: x-is-pulse-admin
+      - name: X-Is-Pulse-Admin
         in: header
         required: true
         schema:
           type: boolean
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -376,7 +352,7 @@ paths:
                 $ref: '#/components/schemas/PlatformDetailsJson'
     put:
       tags:
-      - platform
+      - PLATFORM
       summary: Approve/Reject the platform that was requested to onboard
       description: Returns success or failure information
       operationId: approvePlatform
@@ -388,7 +364,7 @@ paths:
               $ref: '#/components/schemas/PlatformApproveRequest'
         required: true
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -396,7 +372,7 @@ paths:
                 $ref: '#/components/schemas/PulseResponse'
     post:
       tags:
-      - platform
+      - PLATFORM
       summary: Add/Update platform information
       description: Returns success or failure information
       operationId: mergePlatform
@@ -408,7 +384,7 @@ paths:
               $ref: '#/components/schemas/PlatformModel'
         required: true
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -416,25 +392,79 @@ paths:
                 $ref: '#/components/schemas/PulseResponse'
     delete:
       tags:
-      - platform
+      - PLATFORM
       summary: Delete platform based on platform Id
       description: Returns success or failure
       operationId: deletePlatform
       parameters:
-      - name: x-emp-id
+      - name: X-Emp-Id
         in: header
         description: Employee Id
         required: true
         schema:
           type: string
-      - name: x-platform-id
+      - name: X-Platform-Id
         in: header
         description: Platform Id
         required: true
         schema:
           type: string
       responses:
-        200:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PulseResponse'
+  /favorites:
+    post:
+      tags:
+      - PLATFORM
+      summary: Add favorite information
+      description: Returns success or failure information
+      operationId: mergeFavorite
+      requestBody:
+        description: favorite information that need to be added or updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavoriteModel'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PulseResponse'
+    delete:
+      tags:
+      - PLATFORM
+      summary: Delete favorite platform/application based on platform Id/application
+        Id and employee id
+      description: Returns success or failure
+      operationId: deleteFavorite
+      parameters:
+      - name: X-Emp-Id
+        in: header
+        description: Employee Id
+        required: true
+        schema:
+          type: string
+      - name: X-Favorite-Id
+        in: header
+        description: Favorite Id
+        required: true
+        schema:
+          type: string
+      - name: X-Favorite-Type
+        in: header
+        description: Favorite Type
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -443,18 +473,18 @@ paths:
   /profiles:
     get:
       tags:
-      - profile
+      - PROFILE
       summary: Fetch profile information by employee id
       description: Returns single profile information
       operationId: fetchUser
       parameters:
-      - name: x-Emp-Id
+      - name: X-Emp-Id
         in: header
         required: true
         schema:
           type: string
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -462,7 +492,7 @@ paths:
                 $ref: '#/components/schemas/PulseResponse'
     post:
       tags:
-      - profile
+      - PROFILE
       summary: Add/Update profile information
       description: Returns success or failure information
       operationId: mergeUser
@@ -474,7 +504,7 @@ paths:
               $ref: '#/components/schemas/ProfileRequest'
         required: true
       responses:
-        200:
+        "200":
           description: successful operation
           content:
             application/json:
@@ -537,40 +567,6 @@ components:
           type: integer
           format: int32
       description: This will be the response;  information of Applications
-    StatusRequest:
-      type: object
-      properties:
-        status:
-          type: string
-        statusName:
-          type: string
-        statusType:
-          type: string
-        applicationId:
-          type: string
-        empId:
-          type: string
-        statusChange:
-          type: boolean
-        onlyStatusType:
-          type: boolean
-        subscribed:
-          type: boolean
-    PulseResponse:
-      type: object
-      properties:
-        errorCode:
-          type: string
-        errorDescription:
-          type: string
-        callReferenceNumber:
-          type: string
-        responseMessage:
-          type: string
-        responseData:
-          type: object
-        success:
-          type: boolean
     Application Request:
       type: object
       properties:
@@ -613,6 +609,40 @@ components:
         splunkSearch4:
           type: string
       description: It is used to request the information of Applications
+    PulseResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorDescription:
+          type: string
+        callReferenceNumber:
+          type: string
+        responseMessage:
+          type: string
+        responseData:
+          type: object
+        success:
+          type: boolean
+    StatusRequest:
+      type: object
+      properties:
+        status:
+          type: string
+        statusName:
+          type: string
+        statusType:
+          type: string
+        applicationId:
+          type: string
+        empId:
+          type: string
+        statusChange:
+          type: boolean
+        onlyStatusType:
+          type: boolean
+        subscribed:
+          type: boolean
     AuthRoleResponse:
       type: object
       properties:
@@ -628,17 +658,35 @@ components:
           format: int32
         appUuid:
           type: string
+        bizBnkContId:
+          type: string
+        bizBnkContNam:
+          type: string
+        bizBnkContRole:
+          type: string
+        bizBnkContEmail:
+          type: string
+        bizBnkContPhone:
+          type: string
         bizContCoordId:
           type: string
         bizContCoordNam:
           type: string
         bizContCoordRole:
           type: string
-        bizOpsContSuprtLeadId:
+        bizContCoordEmail:
           type: string
-        bizOpsContSuprtLeadNam:
+        bizContCoordPhone:
           type: string
-        bizOpsContSuprtLeadRole:
+        bizOpsCapRdnsLeadId:
+          type: string
+        bizOpsCapRdnsLeadNam:
+          type: string
+        bizOpsCapRdnsLeadRole:
+          type: string
+        bizOpsCapRdnsLeadEmail:
+          type: string
+        bizOpsCapRdnsLeadPhone:
           type: string
         bizOpsChgMgmtLeadId:
           type: string
@@ -646,11 +694,29 @@ components:
           type: string
         bizOpsChgMgmtLeadRole:
           type: string
+        bizOpsChgMgmtLeadEmail:
+          type: string
+        bizOpsChgMgmtLeadPhone:
+          type: string
+        bizOpsContSuprtLeadId:
+          type: string
+        bizOpsContSuprtLeadNam:
+          type: string
+        bizOpsContSuprtLeadRole:
+          type: string
+        bizOpsContSuprtLeadEmail:
+          type: string
+        bizOpsContSuprtLeadPhone:
+          type: string
         bizOpsEnblLeadId:
           type: string
         bizOpsEnblLeadNam:
           type: string
         bizOpsEnblLeadRole:
+          type: string
+        bizOpsEnblLeadEmail:
+          type: string
+        bizOpsEnblLeadPhone:
           type: string
         bizOpsGuildLeadId:
           type: string
@@ -658,11 +724,19 @@ components:
           type: string
         bizOpsGuildLeadRole:
           type: string
+        bizOpsGuildLeadEmail:
+          type: string
+        bizOpsGuildLeadPhone:
+          type: string
         bizOpsItsmLeadId:
           type: string
         bizOpsItsmLeadNam:
           type: string
         bizOpsItsmLeadRole:
+          type: string
+        bizOpsItsmLeadEmail:
+          type: string
+        bizOpsItsmLeadPhone:
           type: string
         bizOpsItsmCommLeadId:
           type: string
@@ -670,11 +744,19 @@ components:
           type: string
         bizOpsItsmCommLeadRole:
           type: string
+        bizOpsItsmCommLeadEmail:
+          type: string
+        bizOpsItsmCommLeadPhone:
+          type: string
         bizOpsKnwlMgmtLeadId:
           type: string
         bizOpsKnwlMgmtLeadNam:
           type: string
         bizOpsKnwlMgmtLeadRole:
+          type: string
+        bizOpsKnwlMgmtLeadEmail:
+          type: string
+        bizOpsKnwlMgmtLeadPhone:
           type: string
         bizOpsLobLeadId:
           type: string
@@ -682,29 +764,9 @@ components:
           type: string
         bizOpsLobLeadRole:
           type: string
-        bizOpsProtectLeadId:
+        bizOpsLobLeadEmail:
           type: string
-        bizOpsProtectLeadNam:
-          type: string
-        bizOpsProtectLeadRole:
-          type: string
-        bizOpsReactLeadId:
-          type: string
-        bizOpsReactLeadNam:
-          type: string
-        bizOpsReactLeadRole:
-          type: string
-        bizOpsStandUpModId:
-          type: string
-        bizOpsStandUpModNam:
-          type: string
-        bizOpsStandUpModRole:
-          type: string
-        bizOpsThreatMgmtLeadId:
-          type: string
-        bizOpsThreatMgmtLeadNam:
-          type: string
-        bizOpsThreatMgmtLeadRole:
+        bizOpsLobLeadPhone:
           type: string
         bizOpsMonitoringLeadId:
           type: string
@@ -712,11 +774,59 @@ components:
           type: string
         bizOpsMonitoringLeadRole:
           type: string
+        bizOpsMonitoringLeadEmail:
+          type: string
+        bizOpsMonitoringLeadPhone:
+          type: string
+        bizOpsProtectLeadId:
+          type: string
+        bizOpsProtectLeadNam:
+          type: string
+        bizOpsProtectLeadRole:
+          type: string
+        bizOpsProtectLeadEmail:
+          type: string
+        bizOpsProtectLeadPhone:
+          type: string
+        bizOpsReactLeadId:
+          type: string
+        bizOpsReactLeadNam:
+          type: string
+        bizOpsReactLeadRole:
+          type: string
+        bizOpsReactLeadEmail:
+          type: string
+        bizOpsReactLeadPhone:
+          type: string
+        bizOpsStandUpModId:
+          type: string
+        bizOpsStandUpModNam:
+          type: string
+        bizOpsStandUpModRole:
+          type: string
+        bizOpsStandUpModEmail:
+          type: string
+        bizOpsStandUpModPhone:
+          type: string
+        bizOpsThreatMgmtLeadId:
+          type: string
+        bizOpsThreatMgmtLeadNam:
+          type: string
+        bizOpsThreatMgmtLeadRole:
+          type: string
+        bizOpsThreatMgmtLeadEmail:
+          type: string
+        bizOpsThreatMgmtLeadPhone:
+          type: string
         capacityLeadId:
           type: string
         capacityLeadNam:
           type: string
         capacityLeadRole:
+          type: string
+        capacityLeadEmail:
+          type: string
+        capacityLeadPhone:
           type: string
         capacityRdnsLeadId:
           type: string
@@ -724,11 +834,19 @@ components:
           type: string
         capacityRdnsLeadRole:
           type: string
+        capacityRdnsLeadEmail:
+          type: string
+        capacityRdnsLeadPhone:
+          type: string
         certCustdnId:
           type: string
         certCustdnNam:
           type: string
         certCustdnRole:
+          type: string
+        certCustdnEmail:
+          type: string
+        certCustdnPhone:
           type: string
         ciLibrarianId:
           type: string
@@ -736,17 +854,29 @@ components:
           type: string
         ciLibrarianRole:
           type: string
+        ciLibrarianEmail:
+          type: string
+        ciLibrarianPhone:
+          type: string
         droComplianceLeadId:
           type: string
         droComplianceLeadNam:
           type: string
         droComplianceLeadRole:
           type: string
-        knowledgeCoordnatrId:
+        droComplianceLeadEmail:
           type: string
-        knowledgeCoordnatrNam:
+        droComplianceLeadPhone:
           type: string
-        knowledgeCoordnatrRole:
+        knwlCoordnatrId:
+          type: string
+        knwlCoordnatrNam:
+          type: string
+        knwlCoordnatrRole:
+          type: string
+        knwlCoordnatrEmail:
+          type: string
+        knwlCoordnatrPhone:
           type: string
         monitoringCoordnatrId:
           type: string
@@ -754,15 +884,31 @@ components:
           type: string
         monitoringCoordnatrRole:
           type: string
+        monitoringCoordnatrEmail:
+          type: string
+        monitoringCoordnatrPhone:
+          type: string
         productPlatformOwnerId:
           type: string
         productPlatformOwnerNam:
           type: string
         productPlatformOwnerRole:
           type: string
+        productPlatformOwnerEmail:
+          type: string
+        productPlatformOwnerPhone:
+          type: string
+        rmdyCabSuprtGrp:
+          type: string
         rmdyChgUsedBySuprtGrp:
           type: string
         rmdyChgApprvdBySuprtGrp:
+          type: string
+        rmdyChgApprvrSuprtGrp:
+          type: string
+        rmdyChgImpSuprtGrp:
+          type: string
+        rmdyChgValSuprtGrp:
           type: string
         rmdyFedrtdIncdntMgrId:
           type: string
@@ -770,11 +916,19 @@ components:
           type: string
         rmdyFedrtdIncdntMgrRole:
           type: string
+        rmdyFedrtdIncdntMgrEmail:
+          type: string
+        rmdyFedrtdIncdntMgrPhone:
+          type: string
         rmdyFedrtdProbMgrId:
           type: string
         rmdyFedrtdProbMgrNam:
           type: string
         rmdyFedrtdProbMgrRole:
+          type: string
+        rmdyFedrtdProbMgrEmail:
+          type: string
+        rmdyFedrtdProbMgrPhone:
           type: string
         rmdyFedrtdChgMgrId:
           type: string
@@ -782,13 +936,25 @@ components:
           type: string
         rmdyFedrtdChgMgrRole:
           type: string
+        rmdyFedrtdChgMgrEmail:
+          type: string
+        rmdyFedrtdChgMgrPhone:
+          type: string
         rmdyIncdntSuprtGrp:
+          type: string
+        rmdyTrtSuprtGrp:
+          type: string
+        rmdyPrtSuprtGrp:
           type: string
         rmdyWoMgrId:
           type: string
         rmdyWoMgrNam:
           type: string
         rmdyWoMgrRole:
+          type: string
+        rmdyWoMgrEmail:
+          type: string
+        rmdyWoMgrPhone:
           type: string
         rmdyWoSuprtGrp:
           type: string
@@ -797,6 +963,20 @@ components:
         threatMgmtLeadNam:
           type: string
         threatMgmtLeadRole:
+          type: string
+        threatMgmtLeadEmail:
+          type: string
+        threatMgmtLeadPhone:
+          type: string
+        xlrChampId:
+          type: string
+        xlrChampNam:
+          type: string
+        xlrChampRole:
+          type: string
+        xlrChampEmail:
+          type: string
+        xlrChampPhone:
           type: string
         crteUserId:
           type: string
@@ -815,23 +995,6 @@ components:
           type: string
         value:
           type: string
-    FavoriteModel:
-      required:
-      - empId
-      - favoriteId
-      - favoriteType
-      type: object
-      properties:
-        empId:
-          pattern: (e)[0-9]{6}
-          type: string
-        favoriteId:
-          pattern: '[0-9]{1,5}'
-          type: string
-        favoriteType:
-          pattern: '[1-2]{1}'
-          type: string
-      description: model to make application and platform as favorite
     PlatformDetails:
       type: object
       properties:
@@ -892,21 +1055,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PlatformDetails'
-    PlatformApproveRequest:
-      type: object
-      properties:
-        platformId:
-          type: string
-        empId:
-          type: string
-        requestedBy:
-          type: string
-        requestStatus:
-          type: string
-        rejectReason:
-          type: string
-        workOrderNumber:
-          type: string
     PlatformModel:
       type: object
       properties:
@@ -936,6 +1084,38 @@ components:
           type: boolean
         workOrderNumber:
           type: string
+    PlatformApproveRequest:
+      type: object
+      properties:
+        platformId:
+          type: string
+        empId:
+          type: string
+        requestedBy:
+          type: string
+        requestStatus:
+          type: string
+        rejectReason:
+          type: string
+        workOrderNumber:
+          type: string
+    FavoriteModel:
+      required:
+      - empId
+      - favoriteId
+      - favoriteType
+      type: object
+      properties:
+        empId:
+          pattern: (e)[0-9]{6}
+          type: string
+        favoriteId:
+          pattern: '[0-9]{1,5}'
+          type: string
+        favoriteType:
+          pattern: '[1-2]{1}'
+          type: string
+      description: model to make application and platform as favorite
     ProfileRequest:
       required:
       - empId
